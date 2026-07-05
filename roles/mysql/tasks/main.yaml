@@ -8,6 +8,22 @@
     name: mysqld
     state: started
     enabled: yes
+    
+- name: Install python3-pip
+  ansible.builtin.dnf:
+    name: python3-pip
+    state: present
+  become: true
+
+- name: Install Python packages
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: pip3
+    state: present
+  loop:
+    - boto3
+    - botocore
+  become: true
 
 - name: setup root password
   ansible.builtin.command: mysql_secure_installation --set-root-pass {{ MYSQL_ROOT_PASSWORD }}
